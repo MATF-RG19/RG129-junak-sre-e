@@ -2,11 +2,20 @@
 #include <math.h>
 #include <GL/glut.h>
 #include <stdio.h>
+#include "junak_srece.h"
+#include "vestica.h"
+#include "third.h"
+
+#define TIMER_ID 0
+#define TIMER_INTERVAL 20
 
 static void on_display(void);
 static void on_reshape(int width, int height);
 static void on_keyboard(unsigned char key, int x, int y);
 static void on_timer(int id);
+static void shoot();
+static void story(int tp);
+static void igrac();
 
 //a1,a2,a3 su koordinate igraca
 double a1=0,a2=0.5,a3=0;
@@ -69,6 +78,17 @@ double e_p1, e_p3;
 //Parametar koji se koristi za kretanje neprijateljevog pucnja
 double p=0;
 
+//Da li je kljuc sakupljen (imaju dva, prvi za zuti kljuc drugi za zeleni)
+int key_collected[2];
+
+//Parametri za pocetnu i krajnju animaciju
+// tp se povecava a tq racuna 
+int tp=0;
+double tq=0;
+
+//Parametar za kretanje bodljikavog zida koji se aktivira kada je skupljen zuti kljuc
+int key_parameter=0;
+
 int main(int argc, char** argv){
 
 	glutInit(&argc, argv);
@@ -81,6 +101,7 @@ int main(int argc, char** argv){
 	glutDisplayFunc(on_display);
 	glutReshapeFunc(on_reshape);
 	glutKeyboardFunc(on_keyboard);
+	glutTimerFunc(TIMER_INTERVAL, on_timer, TIMER_ID);
 	
 
 	glClearColor(0.153, 0.153, 0.255, 0);
@@ -94,7 +115,42 @@ int main(int argc, char** argv){
 
 	return 0;
 }
+//funkcija za podesavanje parametara koji se koriste u pocetnoj i krajnjoj animaciji igre
+static void on_timer(int id){
 
+	if(id != TIMER_ID)
+		return;
+
+	tp++;
+
+	tq = tp/50.0;
+
+	if(tp > 50 && tp < 75)
+		tq = tp%50/25.0;
+	if(tp >= 75 && tp < 100)
+		tq = tp%75/25.0;
+	if(tp >100 && tp < 130)
+		tq = tp%100/30.0;
+	if(tp > 150 && tp < 175)
+		tq = tp%150/25.0;
+	if(tp >= 300 && tp <325)
+		tq = tp%300/25.0;
+	if(tp >= 325 && tp < 350)
+		tq = tp%325/25.0;
+	if(tp >= 350 && tp < 375)
+		tq = tp%350/25.0;
+	if(tp >= 400 && tp < 425)
+		tq = tp%400/25.0;
+	if(tp >= 425 && tp < 475)
+		tq = tp%425/50.0;
+	if(tp>=475)
+		tq=1;
+
+	glutPostRedisplay();
+
+	if(tp < 201 || tp >= 300)
+		glutTimerFunc(TIMER_INTERVAL, on_timer, TIMER_ID);
+}
 /* Program reaguje na tastere:
 
 	esc
@@ -114,6 +170,15 @@ int main(int argc, char** argv){
 
 	k/K
 		-igrac puca
+
+	p/P
+		-precica za drugi nivo
+
+	n/N
+		-preskace najavnu spicu
+
+	o/O
+		-precica za zavrsnu spicu i kraj
 */
 static void on_keyboard(unsigned char key, int x, int y){
 
@@ -154,6 +219,28 @@ static void on_keyboard(unsigned char key, int x, int y){
 		strana =3;
 		glutPostRedisplay();
 		break;
+	case 'p':
+	case 'P':
+		door1=10;
+		a1=15;
+		a3=0;
+		tp=201;
+		glutPostRedisplay();
+		break;
+	case 'o':
+	case 'O':
+		door1=10;
+		a1=60;
+		a3=0;
+		tp=301;
+		key_collected[1] = 1;
+		glutTimerFunc(TIMER_INTERVAL, on_timer, TIMER_ID);
+		break;
+	case 'n':
+	case 'N':
+		tp=201;
+		glutPostRedisplay();
+		break;
 	}
 
 	if(key == 'k' || key == 'K'){
@@ -165,7 +252,7 @@ static void on_keyboard(unsigned char key, int x, int y){
 static void init_lights()
 {
     GLfloat light_position[] = { -5, 15, 0, 0};
-    GLfloat light_ambient[] = { 0.1, 0.1, 0.1, 1 };
+    GLfloat light_ambient[] = { 0.3, 0.3, 0.3, 1 };
     GLfloat light_diffuse[] = { 0.7, 0.7, 0.7, 1 };
     GLfloat light_specular[] = { 0.9, 0.9, 0.9, 1 };
 
@@ -191,7 +278,7 @@ static void osnova(){
 	glPushMatrix();
 
 		glColor3f(0.888,0.736,0.54);
-		glScalef(700, 0.2, 20);
+		glScalef(500, 0.2, 20);
 		glTranslatef(0.498,0,0);
 		glutSolidCube(1);
 	
@@ -203,7 +290,7 @@ static void ograda(){
 
 	int boja=0;
 
-	for(int i=0; i<700; i+= 1, boja++){
+	for(int i=0; i<500; i+= 1, boja++){
 		glPushMatrix();
 		if (boja < 5)
 			glColor3f(0.7, 0.2, 0);
@@ -218,7 +305,7 @@ static void ograda(){
 
 	boja=0;
 
-	for(int i=0; i<700; i+= 1, boja++){
+	for(int i=0; i<500; i+= 1, boja++){
 		glPushMatrix();
 		if (boja < 5)
 			glColor3f(0.7, 0.2, 0);
@@ -242,12 +329,29 @@ static void ograda(){
 	for(int i=-10; i<11; i+= 1){
 		glPushMatrix();
 		glColor3f(0.7, 0.2, 0);
-		glTranslatef(-700, 0.5, i);
+		glTranslatef(-500, 0.5, i);
 		glutSolidCube(1);
 		glPopMatrix();
 	}
 
-	
+//Animacija siljaka s leve strane u drugom nivou
+	for(int i=0; i<5; i++){
+	glPushMatrix();
+		glColor3f(1, 0.512, 456);
+		glTranslatef(20, 0.0, -6-i*0.8);
+		glRotatef(90, -1, 0, 0);
+		glutSolidCone(0.5,1,30,30);
+	glPopMatrix();
+	}
+
+	for(int i=0; i<3; i++){
+	glPushMatrix();
+		glColor3f(1, 0.512, 456);
+		glTranslatef(30, 0.0, -7.5-i*0.8);
+		glRotatef(90, -1, 0, 0);
+		glutSolidCone(0.5,1,30,30);
+	glPopMatrix();
+	}	
 }
 //Prva granica
 static void border1(){
@@ -294,6 +398,9 @@ static void game_over(){
 	health_parameter = 3;
 	door1 =0;
 
+	for(int i=0; i<2; i++)
+		key_collected[i] =0;
+
 }
 //Pravljenje health bara
 static void health_bar(){
@@ -303,7 +410,7 @@ static void health_bar(){
 
 	for(int i=0; i<health_parameter; i++){
 		glPushMatrix();
-			glTranslatef(-10+a1, 9, 2.5+a3 - 0.7*i);
+			glTranslatef(-11+a1, 11.77, 2.2+a3 - 0.7*i);
 			heart();
 		glPopMatrix();
 	}	
@@ -332,19 +439,19 @@ static void shoot(){
 
 	glPushMatrix();
 
-		glColor3f(0.2, 0.3, 0.8);
+		glColor3f(0.0, 0.0, 0.0);
 
 		//U zavisnosti od parametra side se pucanj krece u razlicite strane
 		if(side == 0)
-			glTranslatef(p1 = a1+6*k, 1, p3 = a3);
+			glTranslatef(p1 = a1+6*k, 0.6, p3 = a3);
 		if(side == 1)
-			glTranslatef(p1 = a1, 1, p3 = a3-6*k);
+			glTranslatef(p1 = a1, 0.6, p3 = a3-6*k);
 		if(side == 2)
-			glTranslatef(p1 = a1, 1, p3 = a3+6*k);
+			glTranslatef(p1 = a1, 0.6, p3 = a3+6*k);
 		if(side == 3)
-			glTranslatef(p1 = a1-6*k, 1, p3 = a3);
-		glScalef(0.1, 0.1, 0.1);
-		glutSolidCube(1);
+			glTranslatef(p1 = a1-6*k, 0.6, p3 = a3);
+		
+		glutSolidSphere(0.13,30,30);
 
 	glPopMatrix();
 	glutPostRedisplay();
@@ -355,8 +462,6 @@ static void shoot(){
 		player_parameter =0;
 		shoot_key = 0;
 	}
-
-
 }
 //Obrada sudara s neprijateljem, rezultat je da se igrac resetuje na pocetnu poziciju s jednim zivotom manje
 static void collision(){
@@ -378,19 +483,6 @@ static void collision(){
 		}
 	}
 
-}
-//Funkcija koja pravi oblik za igraca
-static void player_look(){
-
-	glPushMatrix();
-		glutSolidCube(1);	
-	glPopMatrix();
-
-	glPushMatrix();
-		glTranslatef(0.5, 0.4, 0);
-		glScalef(0.5, 0.3, 0.3);
-		glutSolidCube(1);
-	glPopMatrix();
 }
 static void igrac(){
 
@@ -414,18 +506,48 @@ static void igrac(){
 				a3 = 9;	
 			if (a1 < 0)
 				a1 =0;
-			if (a1 > 699)
-				a1 = 699;
+			if (a1 > 500)
+				a1 = 500;
 			if(door1 < 10 && a1 > 18.5)
 				a1 =18.5;
+			if(key_collected[1] == 0 && a1 > 60)
+				a1 = 60;
 
-			glTranslatef(a1 = a1 + 0, a2=0.7, a3 += 0);
+	//funkcija koja registruje da li je skupljen zuti kljuc
+			if(a1+1 >= 34+4.5 && a1-1 <= 34+4.5 && a3+1 >= 4+0.2 && a3-1 <= 4+0.2)
+				key_collected[0] = 1;
+	//funkcija koja registruje da li je skupljen zeleni kljuc
+			if(a1+1 >= 38+4.5 && a1-1 <= 38+4.5 && a3+1 >= -8+0.2 && a3-1 <= -8+0.2)
+				key_collected[1] = 1;
+
+
+	//kada je igrac skupio zeleni kljuc i presao mesto gde je bila granica krece zavrsna animacija
+			if(key_collected[1] == 1 && a1 >60){
+				tp = 300; 
+				glutTimerFunc(TIMER_INTERVAL, on_timer, TIMER_ID);
+			}
+
+
+	//Kolizija s levim siljcima
+			if(a1 > 20-0.5 && a1 < 20+0.5 && a3 > -10 && a3 < -5){
+				a1=15;
+				a3=0;
+				health_parameter--;
+			}
+			if(a1 > 30-0.5 && a1 < 30+0.5 && a3 > -10 && a3 < -7){
+				a1=15;
+				a3=0;
+				health_parameter--;
+			}
+
+			glTranslatef(a1 = a1 + 0, a2=0.0, a3 += 0);
 			move_player =0;
 		}
 		else glTranslatef(a1, a2, a3);
 
 	// onemogucava igracu da prolazi kroz neprijatelje
-		collision();
+		if(door1 < 10)
+			collision();
 		
 		//U zavisnosti od toga na koju smo se stranu kretali na tu stranu se rotira igrac
 		if(strana == 1)
@@ -433,15 +555,12 @@ static void igrac(){
 		if(strana == 2)
 			glRotatef(90, 0, -1, 0);
 		if(strana == 3)
-			glRotatef(90, 0, 0, 1);
+			glRotatef(180, 0, 1, 0);
 
-		//Izmenjeni izgled igraca
+	//funkcija za izgled igraca(nalazi se u vestica.h)
 		player_look();
 
-
-
 	glPopMatrix();
-
 }
 //Funkcija koja proverava da li je neprijatelj pogodio igraca
 static void enemy_hit_or_miss(){
@@ -623,37 +742,198 @@ static void enemy2_design(){
 	glPopMatrix();
 
 }
+//Proverava da li je igrac pogodjen od strane neprijatelja broj 2
+static void enemy2_hit_or_miss(){
+
+	if( a1+0.5 >= e_p1 && a1-0.5<=e_p1 && a3+0.5 >= e_p3 && a3-0.5 <= e_p3){
+		a1=15;
+		a3=0;
+		health_parameter--;
+
+	}
+	glutPostRedisplay();
+}
+static void enemy2_shoot(int x, int z){
+
+	p=enemy_parameter%20;
+
+	//Jedan pucanj koji ide x koordinatom nadole
+	glPushMatrix();
+		glColor3f(0.2, 0.3, 0.8);
+		glTranslatef(e_p1 = x-10*p/20.0, 1,e_p3 = z);
+		glScalef(0.5, 0.1, 0.1);
+		glutSolidCube(2);
+
+		enemy2_hit_or_miss();
+		
+	glPopMatrix();
+
+	//Pucanj gde se menja z koordina udesno 
+	glPushMatrix();
+		glColor3f(0.2, 0.3, 0.8);
+		glTranslatef(e_p1 = x, 1,e_p3 = z+15*p/40.0);
+		glScalef(0.1, 0.1, 0.5);
+
+		//Ovaj if sluzi da se pucanj ne iscrtava kada dodirne levi ili desni zid
+		if(e_p3 > -9.5 && e_p3 < 9.5){
+			glutSolidCube(2);
+
+			enemy2_hit_or_miss();
+		}
+	glPopMatrix();
+
+	//Pucanj gde je x koordinata ista a menja se z koordinata (ulevo)
+	glPushMatrix();
+		glColor3f(0.2, 0.3, 0.8);
+		glTranslatef(e_p1 = x, 1,e_p3 = z-15*p/30.0);
+		glScalef(0.1, 0.1, 0.5);
+
+		//Ovaj if sluzi da se pucanj ne iscrtava kada dodirne levi ili desni zid
+		if(e_p3 > -9.5 && e_p3 < 9.5){
+			glutSolidCube(2);
+
+			enemy2_hit_or_miss();
+		}
+	glPopMatrix();
+
+	//Jedan pucanj koji ide x koordinatom nagore
+	glPushMatrix();
+		glColor3f(0.2, 0.3, 0.8);
+		glTranslatef(e_p1 = x+10*p/20.0, 1,e_p3 = z);
+		glScalef(0.5, 0.1, 0.1);
+		glutSolidCube(2);
+
+		enemy2_hit_or_miss();
+	glPopMatrix();
+
+	glutPostRedisplay();
+}
+static void wall_of_death_collision(){
+
+	if(a1 >= e1[1]-11 && a1 <= e1[1]+10 && a3 >=  e3[0]-1.5 && a3 <= e3[0]+0.5){
+		health_parameter--;
+		a1=15;
+		a3=0;
+	}
+}
+
 //Drugaciji tip neprijatelja u drugoj zoni
 static void enemy2(){
 
+//Naredna tri for-a i dva objekta su zbunje(neprijatelji) iz drugog sektora koji ne mogu biti ubijeni
 	for(int i=0; i<3; i++){
 
 		glPushMatrix();
 			glColor3f(1, 0.512, 456);
-			glTranslatef(20+i*10 , 1, -5+i*3);
+			glTranslatef(20+i*12 , 1, -5+i*3);
 			glRotatef(45, 0, 1, 0);
-			enemy2_design(20+i*10,-5+i*3);
+			enemy2_design();
 		glPopMatrix();
 
 		glPushMatrix();
-			//enemy2_shoot(20+i*10, -5+i*3);
+			enemy2_shoot(20+i*12, -5+i*3);
 		glPopMatrix();
 	}
-	for(int i=3; i<6; i++){
+	for(int i=0; i<4; i++){
 
 		glPushMatrix();
 			glColor3f(1, 0.512, 456);
-			glTranslatef(25+i%3*8 , 1, 5);
+			glTranslatef(25+i*8 , 1, 7);
 			glRotatef(45, 0, 1, 0);
-			enemy2_design(25+i*8,5);
+			enemy2_design();
 		glPopMatrix();
 
 		glPushMatrix();
-			//enemy2_shoot(25+i%3*8, 5);
+			enemy2_shoot(25+i*8, 7);
+		glPopMatrix();
+	}
+	for(int i=0; i<4; i++){
+
+		glPushMatrix();
+			glColor3f(1, 0.512, 456);
+			glTranslatef(30+i*8 , 1, -7 + i%2*3);
+			glRotatef(45, 0, 1, 0);
+			enemy2_design();
+		glPopMatrix();
+
+		glPushMatrix();
+			enemy2_shoot(30+i*8, -7 + i%2*3);
+		glPopMatrix();
+	}
+//Zbun 
+	glPushMatrix();
+		glColor3f(1, 0.512, 456);
+		glTranslatef(26 , 1, 2);
+		glRotatef(45, 0, 1, 0);
+		enemy2_design();
+	glPopMatrix();
+
+	glPushMatrix();
+		enemy2_shoot(26, 2);
+	glPopMatrix();
+
+//Drugi zbun
+	glPushMatrix();
+		glColor3f(1, 0.512, 456);
+		glTranslatef(52 , 1, 3);
+		glRotatef(45, 0, 1, 0);
+		enemy2_design();
+	glPopMatrix();
+
+	glPushMatrix();
+		enemy2_shoot(52, 3);
+	glPopMatrix();
+	
+//Desni zid koji se pomera ako je skupljen zuti kljuc
+	for(int i=0; i<2; i++){
+		glPushMatrix();
+			glColor3f(1, 0.512, 456);
+			if(key_collected[0] == 1){
+
+				key_parameter++;
+
+				if(sin(key_parameter/40.0) > 0)
+					glTranslatef(e1[i] = 22+i*10, 0.6,e3[i] = 9.5 -sin(key_parameter/40.0)*7);
+				else glTranslatef(e1[i] = 22+i*10, 0.6,e3[i] = 9.5 +sin(key_parameter/40.0)*7);
+			}
+			else glTranslatef(e1[i] = 22+i*10, 0.6, e3[i] = 9.5);
+			wall_of_death();
+			wall_of_death_collision();
 		glPopMatrix();
 	}
 
 	glutPostRedisplay();
+}
+//oblik kljuca
+static void key_shape(){
+
+	glPushMatrix();
+		glTranslatef(5.2, 0.2, 0.2);
+		glRotatef(90, 1, 0, 0);
+		glutSolidTorus(0.1, 0.4, 30, 30);
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(4.5, 0.2, -0.2);
+		glRotatef(45, 0, 1, 0);
+		glScalef(0.2, 0.1, 1.2);
+		glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(4.5, 0.2, -0.5);
+		glRotatef(-45, 0, 1, 0);
+		glScalef(0.1, 0.1, 0.6);
+		glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(4.4, 0.2, -0.85);
+		glRotatef(-45, 0, 1, 0);
+		glScalef(0.1, 0.1, 0.6);
+		glutSolidCube(1);
+	glPopMatrix();
+
 }
 static void on_display(void){
 
@@ -661,52 +941,227 @@ static void on_display(void){
 
 	init_lights();
 
-	// Podesavanje kamere i tacke gledista tako da prati kretanje igraca
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(-19+a1, 12, 0+a3, 0+a1, 3, 0+a3, 0, 1, 0);
+//Ako je vremenski parametar manji od 200 treba pokrenuti pocetnu animaciju igrice
+//inace krecemo s igrom 
 
-	//Osnova
-	glPushMatrix();
-		osnova();
-	glPopMatrix();
+	if(tp < 200){
 
-	//Ograda
-	glPushMatrix();
-		ograda();
-	glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		gluLookAt(-30, 14, 0, 0, 1, 0, 0, 1, 0);
 
-	//Neprijatelji prvog nivoa
-	glPushMatrix();
-		enemy();
-	glPopMatrix();
-
-	//Neprijatelji drugog nivoa
-	glPushMatrix();
-		if(door1 >= 10)
-			enemy2();
-	glPopMatrix();
-
-	//Igrac
-	glPushMatrix();
-		igrac();
-	glPopMatrix();
-
-	//Health bar
-	glPushMatrix();
-		health_bar();
-	glPopMatrix();
-
-	//Granica1
-	if(door1 < 10){
+		story(tp);
+		
+		//crta sliku dok ne bude ukradena
+		if(tp < 75){
 		glPushMatrix();
-			border1();
+			glTranslatef(-4, 5.5, -3.5);
+			glScalef(0.01, 0.117, 0.13);
+			bold_and_brash();
 		glPopMatrix();
-	}
+		}
 
-	if(shoot_key == 1){
-		shoot();
+		//leva kugla na stubu
+		glPushMatrix();
+			glColor3f(1, 0.2, 0.2);
+			glTranslatef(-1, 4.15, -5.5);
+			glutSolidSphere(0.65, 30, 30);
+		glPopMatrix();
+
+		//desna kugla na stubu
+		glPushMatrix();
+			glColor3f(1, 0.2, 0.2);
+			if(tp > 150)
+				glTranslatef(-1 -4*tq, 4.15-2*tq, 0.5 + 6*tq);
+			else
+				glTranslatef(-1, 4.15, 0.5);
+			if(tp > 140){
+				glRotatef(180, 0,1,0);
+				player_look();
+			}
+			else glutSolidSphere(0.65,30,30);
+		glPopMatrix();
+
+		//vestica
+		if(tp < 130){
+		glPushMatrix();
+			if(tp < 50)
+				glTranslatef(-25 + 15*tq, 1, -2.5);
+			else if(tp > 100 && tp<130)
+				glTranslatef(-10, 1, -2.5+10*tq);
+			     else
+				glTranslatef(-10, 1, -2.5);
+			final_boss();
+		glPopMatrix();
+		}
+
+		//zvezda koja krade sliku
+		glPushMatrix();
+			if(tp < 75 && tp > 50)
+				glTranslatef(-5, 2+6*tq, -2.5);
+			star();
+		glPopMatrix();
+
+		//zvezda koja pravi portal
+		glPushMatrix();
+			if(tp >=75 && tp <100)
+				glTranslatef(-5, 2.5, -2.5 + 7*tq);
+			glRotatef(90, 0, 1, 0);
+			star();
+		glPopMatrix();
+
 	}
+	else{
+
+	// Podesavanje kamere i tacke gledista tako da prati kretanje igraca (dok ne traje neka od animacija)
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+
+		if(tp>=300 && tp < 425)
+			gluLookAt(40, 14, 0, 60, 4, 0, 0, 1, 0);
+		else if(tp > 425)
+			gluLookAt(40+15*tq, 14-7*tq, 0-4*tq, 60, 4, 0-4*tq, 0, 1, 0);
+		     else
+			gluLookAt(-19+a1, 14, 0+a3, 0+a1, 4, 0+a3, 0, 1, 0);
+
+		//Osnova
+		glPushMatrix();
+			osnova();
+		glPopMatrix();
+
+		//Ograda
+		glPushMatrix();
+			ograda();
+		glPopMatrix();
+	
+		//Ovo se aktivira samo kada igrac predje igricu ili kada koristimo precicu(taster o)
+		if(tp>=300){
+
+			//iscrtava vesticu i kasnije povlaci sa scene
+			glPushMatrix();
+				if(tp >= 400 && tp <425)
+					glTranslatef(60, 0-tq*7, 0);
+				else if(tp<400)glTranslatef(60,0,0);
+				final_boss();
+			glPopMatrix();
+
+			//iscrtava magicnu vesticiju zzvezdu dva puta
+			glPushMatrix();
+				if((tp > 301  && tp < 325) || (tp >= 350  && tp < 375))
+					glTranslatef(65, 1, 0-tq*5);
+				star();
+			glPopMatrix();	
+
+			//animira stvaranje kante
+			if(tp >= 325){
+
+				//kreira kantu za smece
+				glPushMatrix();
+					glColor3f(0.5,0.5,0.5);
+					glTranslatef(65,0.7,-5);
+
+					if(tp < 350)
+						glScalef(1, 10*tq, 1);
+					else glScalef(1, 10, 1);
+
+					glRotatef(90, -1, 0, 0);
+					glutSolidTorus(0.1,0.75,30,30);
+				glPopMatrix();
+	
+				//Poklopac od kante
+				glPushMatrix();
+					glColor3f(0.5,0.5,0.5);
+					glTranslatef(64.5,0.7,-3.5);
+					glRotatef(100,-1,0,0);
+					glRotatef(-38, 1, 0, 0);
+					if(tp < 350)
+						glScalef(1, 0.1*tq, 1);
+					else glScalef(1, 0.1, 1);
+					glutSolidSphere(1,30,30);
+				glPopMatrix();
+			}
+
+			//Postavlja Junaka srece u kantu
+			if(tp >= 375){
+				glPushMatrix();
+					glTranslatef(64.8,0.2,-6);
+					glScalef(0.01,0.08,0.07);
+					bold_and_brash();
+				glPopMatrix();
+			}	
+
+			//Pravi portal
+			if(tp > 390){
+				glPushMatrix();
+					glColor3f(0.2, 0.75, 1);
+					glTranslatef(65, 0.4, 0);
+					glScalef(1.5, 0.3, 1.5);
+					glutSolidSphere(1, 30, 30);
+				glPopMatrix();
+			}	
+		}
+		else {
+			//Neprijatelji prvog nivoa
+			glPushMatrix();
+				enemy();
+			glPopMatrix();
+	
+			//Igrac
+			glPushMatrix();
+				igrac();
+			glPopMatrix();
+
+			//Neprijatelji drugog nivoa
+			glPushMatrix();
+				if(door1 >= 10)
+					enemy2();
+			glPopMatrix();
+
+			//Funkcija koja iscrtava i pozicitonira zuti kljuc
+			if(key_collected[0] == 0){
+			glPushMatrix();
+				glColor3f(1, 1, 0);
+				glTranslatef(34, 0, 5);
+				key_shape();
+			glPopMatrix();
+			}
+
+			//Funkcija koja iscrtava i pozicitonira zeleni kljuc
+			if(key_collected[1] == 0){
+			glPushMatrix();
+				glColor3f(0.564, 0.933, 0.564);
+				glTranslatef(38, 0, -8);
+				key_shape();
+			glPopMatrix();
+			}
+	
+			//Health bar
+			glPushMatrix();
+				health_bar();
+			glPopMatrix();
+	
+			//Granica1 - nestaje kad se uniste svi neprijatelji prvog sektora
+			if(door1 < 10){
+				glPushMatrix();
+					border1();
+				glPopMatrix();
+			}
+	
+			//Granica2 - nestaje kad se skupi zeleni kljuc
+			if(key_collected[1] == 0){
+				glPushMatrix();
+					glTranslatef(40, 0, 0);
+					border1();
+				glPopMatrix();
+			}
+		
+			//AKtivira funkciju za pucanj igraca kada se pritisne taster za pucanje
+			if(shoot_key == 1)
+				shoot();
+			
+		}
+	}	
 
 	glutSwapBuffers();
 }
