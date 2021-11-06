@@ -1,13 +1,19 @@
 #include <stdlib.h>
 #include <math.h>
+
+#ifdef __linux__ 
 #include <GL/glut.h>
+#elif _WIN32
+#include <glut.h>
+#endif
+
 #include <stdio.h>
 #include "junak_srece.h"
 #include "vestica.h"
 #include "third.h"
 
 #define TIMER_ID 0
-#define TIMER_INTERVAL 20
+#define TIMER_INTERVAL 30
 
 static void on_display(void);
 static void on_reshape(int width, int height);
@@ -116,12 +122,13 @@ int main(int argc, char** argv){
 	return 0;
 }
 //funkcija za podesavanje parametara koji se koriste u pocetnoj i krajnjoj animaciji igre
-static void on_timer(int id){
+static void on_timer(int id) {
 
-	if(id != TIMER_ID)
+	if (id != TIMER_ID)
 		return;
-
-	tp++;
+	if (tp < 201 || tp >= 300)
+		tp++;
+	//else return;
 
 	tq = tp/50.0;
 
@@ -148,7 +155,7 @@ static void on_timer(int id){
 
 	glutPostRedisplay();
 
-	if(tp < 201 || tp >= 300)
+	//if(tp < 201 || tp >= 300)
 		glutTimerFunc(TIMER_INTERVAL, on_timer, TIMER_ID);
 }
 /* Program reaguje na tastere:
@@ -193,7 +200,8 @@ static void on_keyboard(unsigned char key, int x, int y){
 		w = 0.45;
 		move_player = 1;
 		strana =0;
-		glutPostRedisplay();
+		// glutPostRedisplay();
+		// glutSwapBuffers();
 		break;
 	case 'a':
 	case 'A':
@@ -201,7 +209,8 @@ static void on_keyboard(unsigned char key, int x, int y){
 		a = -0.45;
 		move_player = 1;
 		strana = 1;
-		glutPostRedisplay();
+		//glutPostRedisplay();
+		//glutSwapBuffers();
 		break;
 	case 'd':
 	case 'D':
@@ -209,7 +218,7 @@ static void on_keyboard(unsigned char key, int x, int y){
 		a = 0.45;
 		move_player = 1;
 		strana =2;
-		glutPostRedisplay();
+		//glutPostRedisplay();
 		break;
 	case 's':
 	case 'S':
@@ -217,7 +226,7 @@ static void on_keyboard(unsigned char key, int x, int y){
 		w = -0.45;
 		move_player = 1;
 		strana =3;
-		glutPostRedisplay();
+		//glutPostRedisplay();
 		break;
 	case 'p':
 	case 'P':
@@ -225,7 +234,7 @@ static void on_keyboard(unsigned char key, int x, int y){
 		a1=15;
 		a3=0;
 		tp=201;
-		glutPostRedisplay();
+		//glutPostRedisplay();
 		break;
 	case 'o':
 	case 'O':
@@ -239,14 +248,14 @@ static void on_keyboard(unsigned char key, int x, int y){
 	case 'n':
 	case 'N':
 		tp=201;
-		glutPostRedisplay();
+		//glutPostRedisplay();
 		break;
 	}
 
 	if(key == 'k' || key == 'K'){
 		side = strana;
 		shoot_key=1;
-		glutPostRedisplay();
+		//glutPostRedisplay();
 	}
 }
 static void init_lights()
@@ -454,7 +463,7 @@ static void shoot(){
 		glutSolidSphere(0.13,30,30);
 
 	glPopMatrix();
-	glutPostRedisplay();
+	//glutPostRedisplay();
 
 	hit_or_miss(p1, p3);
 
@@ -570,7 +579,7 @@ static void enemy_hit_or_miss(){
 		a3=0;
 		health_parameter--;
 	}
-	glutPostRedisplay();
+	//glutPostRedisplay();
 }
 //Neprijatelj puca prvu vrsta pucnja
 static void enemy_shoot(int i){
@@ -595,7 +604,7 @@ static void enemy_shoot(int i){
 
 	glPopMatrix();
 
-	glutPostRedisplay();
+	//glutPostRedisplay();
 	}
 }
 //Funkcija koja iscrtava neprijatelje, pomera ih i poziva funkciju za pucanje neprijatelja
@@ -658,7 +667,7 @@ static void enemy(){
 					
 			glPopMatrix();
 
-			glutPostRedisplay();			
+			//glutPostRedisplay();			
 		}
 		//Iscrtava 5 neprijatelja s desne strane na isti nacin kao i prosla for petlja
 		for(int i=5; i<10; i++){
@@ -705,7 +714,7 @@ static void enemy(){
 					
 			glPopMatrix();
 
-			glutPostRedisplay();
+			//glutPostRedisplay();
 		}
 		//Proverava se da li su svi od prvih 10 neprijatelja unisteni
 		door1=0;
@@ -751,7 +760,7 @@ static void enemy2_hit_or_miss(){
 		health_parameter--;
 
 	}
-	glutPostRedisplay();
+	//glutPostRedisplay();
 }
 static void enemy2_shoot(int x, int z){
 
@@ -806,7 +815,7 @@ static void enemy2_shoot(int x, int z){
 		enemy2_hit_or_miss();
 	glPopMatrix();
 
-	glutPostRedisplay();
+	//glutPostRedisplay();
 }
 static void wall_of_death_collision(){
 
@@ -902,7 +911,7 @@ static void enemy2(){
 		glPopMatrix();
 	}
 
-	glutPostRedisplay();
+	//glutPostRedisplay();
 }
 //oblik kljuca
 static void key_shape(){
@@ -1159,9 +1168,11 @@ static void on_display(void){
 			//AKtivira funkciju za pucanj igraca kada se pritisne taster za pucanje
 			if(shoot_key == 1)
 				shoot();
+
+			
 			
 		}
 	}	
-
+	//glutPostRedisplay();
 	glutSwapBuffers();
 }

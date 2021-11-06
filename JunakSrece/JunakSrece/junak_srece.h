@@ -1,6 +1,12 @@
 #include <stdlib.h>
 #include <math.h>
+
+#ifdef __linux__ 
 #include <GL/glut.h>
+#elif _WIN32
+#include <glut.h>
+#endif
+
 #include <stdio.h>
 #include <time.h>
 
@@ -565,5 +571,3 @@ static void bold_and_brash(){
 	glPopMatrix();
 	}
 }
-
-

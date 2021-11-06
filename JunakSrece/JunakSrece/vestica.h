@@ -1,6 +1,12 @@
 #include <stdlib.h>
 #include <math.h>
+
+#ifdef __linux__ 
 #include <GL/glut.h>
+#elif _WIN32
+#include <glut.h>
+#endif
+
 #include <stdio.h>
 #include <time.h>
 
@@ -138,20 +144,3 @@ glColor3f(1, 0.2, 0.2);
 	glPopMatrix();
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
