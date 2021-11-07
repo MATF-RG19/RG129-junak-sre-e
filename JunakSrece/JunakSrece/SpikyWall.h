@@ -11,5 +11,6 @@
 void spiky_wall(int key, double player_x, double player_z);
 void spikes_wall_collision(double player_x, double player_z);
 void spikes_design();
+void static_spikes();
 
 int damage_spikes;

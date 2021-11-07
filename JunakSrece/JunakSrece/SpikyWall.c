@@ -41,3 +41,23 @@ void spikes_design() {
 		glPopMatrix();
 	}
 }
+void static_spikes() {
+	//Iscrtavanje siljaka s leve strane u drugom nivou
+	for (int i = 0; i < 5; i++) {
+		glPushMatrix();
+		glColor3f(1, 0.512, 456);
+		glTranslatef(20, 0.0, -6 - i * 0.8);
+		glRotatef(90, -1, 0, 0);
+		glutSolidCone(0.5, 1, 30, 30);
+		glPopMatrix();
+	}
+
+	for (int i = 0; i < 3; i++) {
+		glPushMatrix();
+		glColor3f(1, 0.512, 456);
+		glTranslatef(30, 0.0, -7.5 - i * 0.8);
+		glRotatef(90, -1, 0, 0);
+		glutSolidCone(0.5, 1, 30, 30);
+		glPopMatrix();
+	}
+}
