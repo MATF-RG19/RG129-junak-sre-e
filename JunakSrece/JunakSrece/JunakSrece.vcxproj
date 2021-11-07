@@ -141,12 +141,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BeginingAnimation.c" />
+    <ClCompile Include="BoldAndBrash.c" />
     <ClCompile Include="Main.c" />
     <ClCompile Include="EnemyBush.c" />
+    <ClCompile Include="Witch.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EnemyBush.h" />
-    <ClInclude Include="junak_srece.h" />
+    <ClInclude Include="BoldAndBrash.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="BeginingAnimation.h" />
     <ClInclude Include="vestica.h" />

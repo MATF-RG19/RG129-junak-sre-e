@@ -24,9 +24,15 @@
     <ClCompile Include="BeginingAnimation.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BoldAndBrash.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Witch.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="junak_srece.h">
+    <ClInclude Include="BoldAndBrash.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BeginingAnimation.h">
