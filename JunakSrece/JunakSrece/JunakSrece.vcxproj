@@ -140,11 +140,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="6.c" />
+    <ClCompile Include="BeginingAnimation.c" />
+    <ClCompile Include="Main.c" />
+    <ClCompile Include="EnemyBush.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EnemyBush.h" />
     <ClInclude Include="junak_srece.h" />
-    <ClInclude Include="third.h" />
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="BeginingAnimation.h" />
     <ClInclude Include="vestica.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

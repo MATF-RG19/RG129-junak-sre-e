@@ -15,7 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="6.c">
+    <ClCompile Include="Main.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBush.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BeginingAnimation.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -23,10 +29,16 @@
     <ClInclude Include="junak_srece.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="third.h">
+    <ClInclude Include="BeginingAnimation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vestica.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBush.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
