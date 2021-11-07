@@ -1,5 +1,4 @@
 # RG129-junak-srece
-Junak sreće
 
 # Kontrole: 
 Igrac se moze kretati pomocu tastera AWDS, a za pucanj koristi taster K.
