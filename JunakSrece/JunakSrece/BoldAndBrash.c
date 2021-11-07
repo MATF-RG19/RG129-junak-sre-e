@@ -3,7 +3,7 @@
 #define z 1
 
 void bold_and_brash() {
- /*
+ /* Matrica kocki koje sacinjavaju zeleni objekat u igrici
 35 11, 12, 13, 14,
 34 10, 11, 11, 12, 13, 14, 15
 33 9 10 11 12 13 14 15 16

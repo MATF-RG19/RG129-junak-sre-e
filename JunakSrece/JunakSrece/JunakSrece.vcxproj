@@ -142,16 +142,24 @@
   <ItemGroup>
     <ClCompile Include="BeginingAnimation.c" />
     <ClCompile Include="BoldAndBrash.c" />
+    <ClCompile Include="EndingAnimation.c" />
+    <ClCompile Include="Key.c" />
     <ClCompile Include="Main.c" />
     <ClCompile Include="EnemyBush.c" />
+    <ClCompile Include="Player.c" />
+    <ClCompile Include="SpikyWall.c" />
     <ClCompile Include="Witch.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EndingAnimation.h" />
     <ClInclude Include="EnemyBush.h" />
     <ClInclude Include="BoldAndBrash.h" />
+    <ClInclude Include="Key.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="BeginingAnimation.h" />
-    <ClInclude Include="vestica.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="SpikyWall.h" />
+    <ClInclude Include="Witch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

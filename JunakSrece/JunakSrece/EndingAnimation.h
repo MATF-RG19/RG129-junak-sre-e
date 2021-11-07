@@ -4,7 +4,7 @@
 #include <glut.h>
 #endif
 
-#include "vestica.h"
+#include "Witch.h"
 #include "BoldAndBrash.h"
 #include <stdio.h>
 #include <stdlib.h>

@@ -12,8 +12,6 @@ double movement_counter = 0;
 static void bush_hit_or_miss(double player_x, double player_z) {
 
 	if (player_x + 0.5 >= xkor && player_x - 0.5 <= xkor && player_z + 0.5 >= zkor && player_z - 0.5 <= zkor) {
-		player_x = 15;
-		player_z = 0;
 		damage++;
 	}
 }
@@ -111,7 +109,7 @@ void bushDesign() {
 	glPopMatrix();
 
 }
-
+// Pucnjevi iz neprijatelja zbuna
 void bush_shoot(int x, int z, double player_x, double player_z) {
 
 	counter++;
@@ -120,7 +118,7 @@ void bush_shoot(int x, int z, double player_x, double player_z) {
 	//Jedan pucanj koji ide x koordinatom nadole
 	glPushMatrix();
 	glColor3f(0.2, 0.3, 0.8);
-	glTranslatef(xkor=x- movement_counter /70.0, 0.7, zkor=z);//x-10*p22/50.0
+	glTranslatef(xkor=x- movement_counter /70.0, 0.7, zkor=z);
 	glScalef(0.5, 0.1, 0.1);
 	glutSolidCube(2);
 
@@ -131,7 +129,7 @@ void bush_shoot(int x, int z, double player_x, double player_z) {
 	//Pucanj gde se menja z koordina udesno 
 	glPushMatrix();
 	glColor3f(0.2, 0.3, 0.8);
-	glTranslatef(xkor = x, 0.7, zkor = z + movement_counter /100.0);//15*p22/40.0
+	glTranslatef(xkor = x, 0.7, zkor = z + movement_counter /100.0);
 	glScalef(0.1, 0.1, 0.5);
 
 	//Ovaj if sluzi da se pucanj ne iscrtava kada dodirne levi ili desni zid
@@ -145,7 +143,7 @@ void bush_shoot(int x, int z, double player_x, double player_z) {
 	//Pucanj gde je x koordinata ista a menja se z koordinata (ulevo)
 	glPushMatrix();
 	glColor3f(0.2, 0.3, 0.8);
-	glTranslatef(xkor=x, 0.7, zkor=z- movement_counter /100.0);//zkor=z-15*p22/30.0
+	glTranslatef(xkor=x, 0.7, zkor=z- movement_counter /100.0);
 	glScalef(0.1, 0.1, 0.5);
 
 	//Ovaj if sluzi da se pucanj ne iscrtava kada dodirne levi ili desni zid
@@ -159,12 +157,11 @@ void bush_shoot(int x, int z, double player_x, double player_z) {
 	//Jedan pucanj koji ide x koordinatom nagore
 	glPushMatrix();
 	glColor3f(0.2, 0.3, 0.8);
-	glTranslatef(xkor = x + movement_counter /100.0, 0.7, zkor=z);//xkor = x + 10*p22/20.0
+	glTranslatef(xkor = x + movement_counter /100.0, 0.7, zkor=z);
 	glScalef(0.5, 0.1, 0.1);
 	glutSolidCube(2);
 
 	bush_hit_or_miss(player_x, player_z);
 	glPopMatrix();
 
-	//glutPostRedisplay();
 }

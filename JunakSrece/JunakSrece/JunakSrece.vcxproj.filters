@@ -30,6 +30,18 @@
     <ClCompile Include="Witch.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EndingAnimation.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpikyWall.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Key.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoldAndBrash.h">
@@ -38,13 +50,25 @@
     <ClInclude Include="BeginingAnimation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vestica.h">
+    <ClInclude Include="Witch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EnemyBush.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EndingAnimation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpikyWall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Key.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
