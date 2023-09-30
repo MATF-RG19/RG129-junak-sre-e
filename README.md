@@ -1,26 +1,28 @@
-# RG129-junak-srece
+# Junak srece (Bold and brash)
 
-# Kontrole: 
-Igrac se moze kretati pomocu tastera AWDS, a za pucanj koristi taster K.
+# Controls: 
+Player can move using AWDS, and for shooting K.
 
-Precice:    
-n/N - preskace najavnu spicu(pocetnu animaciju)   
-p/P - precica za preskakanje prvog sektora    
-o/O - pokrece krajnju animaciju   
+Shortcuts:    
+n/N - skips intro scene(beginning animation)   
+p/P - skips first region    
+o/O - starts ending animation   
 
-# Tok igre:         
-Pocetna animacija: vestica krade sliku iz muzeja i bezi kroz portal, a za njom krece kugla sa stuba koja je ustvari macka.  
-Prvi nivo: cilj je upucati sve neprijatelje kako bi granica nestala i zapoceo drugi nivo.    
-Drgi nivo: cilj je sakupiti pravi kljuc za otvaranje druge granice i izaci iz lavirinta.    
-Zavrsna animacija(kraj igre): kraj igre je kad igrac predje mesto gde je bila druga granica. Tada se aktivira kranja animacija gde vestica baca sliku Junaka srece u smece.   
+# Gameplay:         
+Intro animation: witch stealing the painting from the museum, running away through portal on wall followed by secret security guard.  
+First level: goal is to destroy all cubes which will cause border to disappear and second level will start.  
+Second level: goal is to collect key that will unlock second border and to get out of maze.      
+Ending animation(end of game): game ends when player crosses place where second border was. That will start ending animation where witch is throwing painting "Junak srece"("Bold and brash") in the trash. 
 
-# Funkcionalnost igre:    
-Health igraca predstavljen je kao tri srca u gornjem desnom uglu ekrana. Radnje koje rezultuju gubljenjem jednog health-a su: kolizija igraca i kackastog neprijatelja, kolizija igraca i pucnja bilo kog neprijatelja, kolizija igraca i siljaka. U slucaju da igrac prilikom ovih desavanja ima vise od jednog zivota bice restartovan na odgovarajuce mesto (startnu poziciju prvog ili drugog nivoa). Ako je igrac izgubio poslednji zivot igrica se restartuje.    
+# Functionality:    
+Health of player is represented as three hearts in upper right corner. 
+Actions that cause loosing one health: collision of player and enemy cubes, collision of player and shooting of any enemy, collision of player and spikes. 
+When loosing health player gets spawned on starting place of first or second level. If player losses last helth point then game gets restarted.
 
-Kocka neprijatelj menja boju kao upozorenje igracu pre nego sto ispali svoj pucanj. 
+Cube enemy changes collor from green to red to signal to player it is about to shoot. 
 
-U drugom nivou jedan kjuc otvara granicu i taj kljuc je neophodno skupiti za prelazak igrice. Drugi kljuc je klopka koja aktivira pomerajuci zid siljaka i nije potrebno skupiti ga za zavrsetak igrice. 
-# Pokretanje igre:    
+In second level one key opens the border and that is the only key needed to proceede to the end of game. Other key is a trap and it activates spikes. 
+# Starting of game:    
 Linux - gcc Main.c -lGL -lGLU -lglut -lm    
-Windows - Otvoriti datoteku JunakSrece.vcxproj u VisualStudio i pokrenuti ga odatle.
+Windows - Open JunakSrece.vcxproj in VisualStudio and start it from there.
 
